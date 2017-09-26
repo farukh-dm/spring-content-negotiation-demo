@@ -43,6 +43,59 @@ public class HelloWorldController {
 		return "welcome";
 	}
 	
+	@RequestMapping(
+		method = RequestMethod.GET, 
+		value="/user/1", 
+		produces={"application/xml", "application/json"})
+	public @ResponseBody ResponseEntity<User>getUser(HttpServletRequest request, HttpSession session, HttpServletResponse response) {
+		
+		User user = new User("demo@demo.com", "Demo123");
+		return new ResponseEntity<User>(user, HttpStatus.OK);
+		
+	}
+	
+	@RequestMapping(
+		method = RequestMethod.GET, 
+		value="/user/1")
+	public ModelAndView getUserWithView(HttpServletRequest request, HttpSession session) {
+		
+		User user = new User("demo@demo.com", "Demo123");
+		ModelAndView mv = new ModelAndView("user/_user");
+		mv.addObject("user", user);
+		return mv;
+		
+	}
+	
+	// For type .xlsx
+	@RequestMapping(
+		method = RequestMethod.GET, 
+		value="/user/1", 
+		produces = {"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"})
+	public UserExcelView getUserExcel(HttpServletRequest request, 
+		HttpSession session, Model model) {
+		
+		User user = new User("demo@demo.com", "Demo123");
+		model.addAttribute("user", user);
+		return new UserExcelView();
+		
+	}
+	
+	// For type .pdf
+	@RequestMapping(
+		method = RequestMethod.GET, 
+		value="/user/1", 
+		produces = {"application/pdf"})
+	public UserPdfView getUserPdf(HttpServletRequest request, 
+		HttpSession session, Model model) {
+		
+		User user = new User("demo@demo.com", "Demo123");
+		model.addAttribute("user", user);
+		return new UserPdfView();
+		
+	}
+	
+	// Some other demonstration.
+	
 	@RequestMapping(method = RequestMethod.GET, value="hi")
 	public String sayHi(ModelMap model) {
 		model.addAttribute("greeting", "HI");
@@ -109,55 +162,4 @@ public class HelloWorldController {
 		return model;
 	}
 	
-	@RequestMapping(
-		method = RequestMethod.GET, 
-		value="/user/1", 
-		produces={"application/xml", "application/json"})
-	public @ResponseBody ResponseEntity<User>getUser(HttpServletRequest request, HttpSession session, HttpServletResponse response) {
-		
-		User user = new User("demo@demo.com", "Demo123");
-		return new ResponseEntity<User>(user, HttpStatus.OK);
-		
-	}
-	
-	@RequestMapping(
-		method = RequestMethod.GET, 
-		value="/user/1")
-	public ModelAndView getUserWithView(HttpServletRequest request, HttpSession session) {
-		
-		User user = new User("demo@demo.com", "Demo123");
-		ModelAndView mv = new ModelAndView("user/_user");
-		mv.addObject("user", user);
-		return mv;
-		
-	}
-	
-	// For type .xlsx
-	@RequestMapping(
-		method = RequestMethod.GET, 
-		value="/user/1", 
-		produces = {"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"})
-	public UserExcelView getUserExcel(HttpServletRequest request, 
-		HttpSession session, Model model) {
-		
-		User user = new User("demo@demo.com", "Demo123");
-		model.addAttribute("user", user);
-		return new UserExcelView();
-		
-	}
-	
-	// For type .pdf
-	@RequestMapping(
-		method = RequestMethod.GET, 
-		value="/user/1", 
-		produces = {"application/pdf"})
-	public UserPdfView getUserPdf(HttpServletRequest request, 
-		HttpSession session, Model model) {
-		
-		User user = new User("demo@demo.com", "Demo123");
-		model.addAttribute("user", user);
-		return new UserPdfView();
-		
-	}
-
 }

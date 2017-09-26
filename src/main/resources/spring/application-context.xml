@@ -12,7 +12,11 @@
 
 	<!-- DispatcherServlet Context: defines this servlet's request-processing infrastructure -->
 	
+	<!-- Content Negotiation configuration -->
+	<beans:import resource="view-resolver.xml" />
+	
 	<!-- Enables the Spring MVC @Controller programming model -->
+	<!-- contentNegotiationManager corresponding bean is initialized in view-resolver.xml -->
 	<mvc:annotation-driven content-negotiation-manager="contentNegotiationManager" />
 	
 	<context:component-scan base-package="com.demo.spring" />
@@ -21,6 +25,7 @@
 		up static resources in the ${webappRoot}/resources directory -->
 	<resources mapping="/resources/**" location="/resources/" />
 
+	<!-- TODO: To look into later -->
 	<beans:bean class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
 		<!-- <property name="exceptionMappings">
 			<props>
@@ -31,8 +36,5 @@
 		</property> -->
 		<beans:property name="defaultErrorView" value="error" />
 	</beans:bean>
-	
-	
-	<beans:import resource="view-resolver.xml" />
 	
 </beans:beans>
