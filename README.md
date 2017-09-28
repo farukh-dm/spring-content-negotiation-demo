@@ -9,8 +9,8 @@ There are three situations where we need to know what type of data-format to sen
 Determining what format the user has requested relies on a ContentNegotationStrategy.
 
 ## Enabling Content Negotiation in Spring MVC
-1. Add a path extension (suffix) in the URL. So, if the incoming URL is something like <host>:<port>/spring-content-negotiation-demo/user/1.html then HTML is required.
-2. A URL parameter like this: <host>:<port>/spring-content-negotiation-demo/user/1?format=xls. The name of the parameter is format by default, but this may be changed.
+1. Add a path extension (suffix) in the URL. So, if the incoming URL is something like host:port/spring-content-negotiation-demo/user/1.html then HTML is required.
+2. A URL parameter like this: host:port/spring-content-negotiation-demo/user/1?format=xls. The name of the parameter is format by default, but this may be changed.
 3. Finally the Accept HTTP header property is checked.
 
 This initiative is to try out Spring's Content Negotiation feature.
@@ -58,13 +58,13 @@ Use below instructions to get the project up and running on your local work stat
 ```
 
 ```
-<host>:<port>/spring-content-negotiation-demo/user/1>mediaType=json
+<host>:<port>/spring-content-negotiation-demo/user/1?mediaType=json
 ```
 ```
-<host>:<port>/spring-content-negotiation-demo/user/1>mediaType=xml
+<host>:<port>/spring-content-negotiation-demo/user/1?mediaType=xml
 ```
 ```
-<host>:<port>/spring-content-negotiation-demo/user/1>mediaType=pdf
+<host>:<port>/spring-content-negotiation-demo/user/1?mediaType=pdf
 ```
 ```
 and so on...
