@@ -1,7 +1,4 @@
-/**
- * 
- */
-package com.demo.spring.view.excel;
+package com.demo.spring.exception.view.excel;
 
 import java.util.Map;
 
@@ -18,28 +15,40 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.demo.spring.Dto.User;
+import com.demo.spring.common.AppConstant;
+import com.demo.spring.exception.beans.ExceptionMessageDto;
 import com.demo.spring.view.excel.abstractView.AbstractCustomExcelView;
 
-/**
- * @author d_farukh
- *
- */
-public class UserExcelView extends AbstractCustomExcelView {
+public class ExceptionExcelView extends AbstractCustomExcelView {
 	
 	public final HSSFCellStyle NO_STYLE = null;
-	@SuppressWarnings("unused")
-	private static final Logger LOGGER = LoggerFactory.getLogger(UserExcelView.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(ExceptionExcelView.class);
+	
+	private ExceptionMessageDto exceptionMessageDto;
+	
+	public ExceptionExcelView() {
+		super();
+	}
+
+	public ExceptionExcelView(ExceptionMessageDto exceptionMessageDto) {
+		super();
+		this.exceptionMessageDto = exceptionMessageDto;
+	}
 
 	@Override
 	protected void buildExcelDocument(Map<String, Object> model,
 		Workbook workbook, HttpServletRequest request,
 		HttpServletResponse response) throws Exception {
 
-		User user = (User) model.get("user");
+		//ExceptionMessageDto exceptionMsgDto = (ExceptionMessageDto) model.get("exceptionMessageDto");
+		
+		if(null == exceptionMessageDto) {
+			exceptionMessageDto = new ExceptionMessageDto();
+			exceptionMessageDto.setMessage(AppConstant.GENERIC_ERROR_MESSAGE);
+		}
         
         // create sheet
-        Sheet sheet = workbook.createSheet("User");
+        Sheet sheet = workbook.createSheet("ExceptionMessage");
         
         Row row = null;
         Cell cell = null;
@@ -59,21 +68,17 @@ public class UserExcelView extends AbstractCustomExcelView {
  
         cell = row.createCell(c++);
         cell.setCellStyle(style);
-        cell.setCellValue("Email");
- 
-        cell = row.createCell(c++);
-        cell.setCellStyle(style);
-        cell.setCellValue("Name");
+        cell.setCellValue("Error");
         
         row = sheet.createRow(r++);
         row.createCell(0).setCellValue(1);
-        row.createCell(1).setCellValue(user.getEmail());
-        row.createCell(2).setCellValue(user.getName());
+        row.createCell(1).setCellValue(exceptionMessageDto.getMessage());
  
         //response.setContentLength(workbook.getBytes().length);
-        response.setHeader("Content-Disposition", String.format("attachment; filename=\"user.xlsx\""));
+        response.setHeader("Content-Disposition", String.format("attachment; filename=\"Error.xlsx\""));
         //response.setContentType("application/octet-stream");
 		
 	}
 
 }
+

@@ -25,6 +25,7 @@ import com.demo.spring.Dto.User;
 public class UserExcelViewOld extends AbstractExcelView {
 	
 	public final HSSFCellStyle NO_STYLE = null;
+	@SuppressWarnings("unused")
 	private static final Logger LOGGER = LoggerFactory.getLogger(UserExcelViewOld.class);
 
 	@Override

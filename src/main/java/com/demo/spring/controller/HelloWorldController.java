@@ -3,12 +3,15 @@
  */
 package com.demo.spring.controller;
 
+import java.io.IOException;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -19,12 +22,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.servlet.HandlerMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.demo.spring.Dto.Employee;
-import com.demo.spring.Dto.Person;
 import com.demo.spring.Dto.User;
+import com.demo.spring.exception.handler.AppExceptionHandler;
 import com.demo.spring.view.excel.UserExcelView;
 import com.demo.spring.view.pdf.UserPdfView;
 
@@ -33,14 +36,18 @@ import com.demo.spring.view.pdf.UserPdfView;
  *
  */
 @Controller
-@RequestMapping(value="/")
+@SuppressWarnings("unused")
 public class HelloWorldController {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(HelloWorldController.class);
 	
-	@RequestMapping(method = RequestMethod.GET)
+	@Autowired
+	AppExceptionHandler genericAppExceptionHandler;
+	
+	// Welcome page / Home page / Index / Landing page.
+	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String sayHello() {
-		return "welcome";
+		return "hello";
 	}
 	
 	@RequestMapping(
@@ -94,6 +101,82 @@ public class HelloWorldController {
 		
 	}
 	
+	// In case of error the, the error response will be in the requested media format & status 500
+	@RequestMapping(
+		method = RequestMethod.GET, 
+		value="/error", 
+		produces={"application/xml", "application/json"})
+	public @ResponseBody ResponseEntity<User>getError(
+		HttpServletRequest request, 
+		HttpSession session, 
+		HttpServletResponse response) throws Exception {
+		
+		User user = new User("demo@demo.com", "Demo123");
+		if(true) {
+			throw new Exception("Generated exception in the execution");
+		}
+		return new ResponseEntity<User>(user, HttpStatus.OK);
+		
+	}
+	
+	@RequestMapping(
+		method = RequestMethod.GET, 
+		value="error")
+	public ModelAndView getErrorWithView(
+		HttpServletRequest request, 
+		HttpSession session) throws Exception {
+		
+		User user = new User("demo@demo.com", "Demo123");
+		ModelAndView mv = new ModelAndView("user/_user");
+		mv.addObject("user", user);
+		
+		if(true) {
+			throw new Exception("Generated exception in the execution");
+		}
+		
+		return mv;
+		
+	}
+	
+	// For type .xlsx
+	@RequestMapping(
+		method = RequestMethod.GET, 
+		value="/error", 
+		produces = {"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"})
+	public UserExcelView getErrorExcel(
+		HttpServletRequest request, 
+		HttpSession session, Model model) throws Exception {
+		
+		User user = new User("demo@demo.com", "Demo123");
+		model.addAttribute("user", user);
+		
+		if(true) {
+			throw new Exception("Generated exception in the excel execution");
+		}
+		
+		return new UserExcelView();
+		
+	}
+	
+	// For type .pdf
+	@RequestMapping(
+		method = RequestMethod.GET, 
+		value="/error", 
+		produces = {"application/pdf"})
+	public UserPdfView getErrorPdf(HttpServletRequest request, 
+		HttpSession session, Model model) throws Exception {
+		
+		User user = new User("demo@demo.com", "Demo123");
+		model.addAttribute("user", user);
+		
+		if(true) {
+			throw new Exception("Generated exception in the pdf execution");
+		}
+		
+		return new UserPdfView();
+		
+	}
+	
 	// Some other demonstration.
 	
 	@RequestMapping(method = RequestMethod.GET, value="hi")
@@ -136,30 +219,15 @@ public class HelloWorldController {
 		
 	}
 	
-	@RequestMapping(method = RequestMethod.GET, value="/employee", 
-		produces={"application/xml", "application/json"})
-    @ResponseStatus(HttpStatus.OK)
-	public @ResponseBody Employee getEmp() {
-		
-		Employee emp = new Employee("P2586", "Farukh");
-		return emp;
-		
-	}
-	
-	@RequestMapping(method = RequestMethod.GET, value="/person", 
-		produces={"application/xml", "application/json"})
-	public ResponseEntity<Person>getPerson() {
-		
-		Person p = new Person("P2586", "Farukh");
-		return new ResponseEntity<Person>(p, HttpStatus.OK);
-		
-	}
-	
 	@ExceptionHandler(value=Exception.class)
-	public @ResponseBody ModelAndView handleException(Exception exception, HttpSession session) {
-		ModelAndView model = new ModelAndView("error");
-		model.addObject("exception", exception);
-		return model;
+	public Object handleException(
+		HttpServletRequest request, 
+		HttpServletResponse response, 
+		Exception exception, 
+		HttpSession session) throws IOException {
+		
+		return genericAppExceptionHandler.handle(exception, request.getAttribute(HandlerMapping.PRODUCIBLE_MEDIA_TYPES_ATTRIBUTE));
+		
 	}
 	
 }

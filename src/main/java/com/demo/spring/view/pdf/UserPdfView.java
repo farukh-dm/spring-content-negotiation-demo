@@ -23,6 +23,7 @@ import com.itextpdf.text.pdf.PdfWriter;
  */
 public class UserPdfView extends AbstractCustomPdfView {
 
+	@SuppressWarnings("unused")
 	@Override
 	protected void buildPdfDocument(Map<String, Object> model,
 		Document document, PdfWriter writer, HttpServletRequest request,

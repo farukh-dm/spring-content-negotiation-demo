@@ -28,6 +28,7 @@ public abstract class AbstractCustomExcelView extends AbstractView {
 	
 	/** The extension to look for existing templates */	
 	private static final String EXTENSION = ".xlsx";	
+	@SuppressWarnings("unused")
 	private String url;	
 	
 	/**	 * Default Constructor.	 * Sets the content type of the view to "application/vnd.ms-excel".	 */	

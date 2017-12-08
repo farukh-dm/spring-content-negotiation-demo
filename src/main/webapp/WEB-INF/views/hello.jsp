@@ -13,6 +13,24 @@
 <title>Hello page</title>
 </head>
 <body>
-<h2>Hello World!</h2>
+<h2>Hello there!</h2>
+<p>Please use following links to demonstrate:</p>
+<ul>
+<li><a href="<%= request.getContextPath()%>/user/1">/user/1</a></li>
+<li><a href="<%= request.getContextPath()%>/user/1.xml">/user/1.xml</a></li>
+<li><a href="<%= request.getContextPath()%>/user/1.json">/user/1.json</a></li>
+<li><a href="<%= request.getContextPath()%>/user/1.xlsx">/user/1.xlsx</a></li>
+<li><a href="<%= request.getContextPath()%>/user/1.pdf">/user/1.pdf</a></li>
+</ul>
+
+<p>Please use following links to demonstrate Error scenarios:</p>
+<ul>
+<li><a href="<%= request.getContextPath()%>/error">/error</a></li>
+<li><a href="<%= request.getContextPath()%>/error.xml">/error.xml</a></li>
+<li><a href="<%= request.getContextPath()%>/error.json">/error.json</a></li>
+<li><a href="<%= request.getContextPath()%>/error.xlsx">/error.xlsx</a></li>
+<li><a href="<%= request.getContextPath()%>/error.pdf">/error.pdf</a></li>
+</ul>
+
 </body>
 </html>
