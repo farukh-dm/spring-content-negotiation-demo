@@ -35,8 +35,9 @@ Use below instructions to get the project up and running on your local work stat
 * Do clean build
 * Add a server(Tomcat/others) & add the application to it.
 * Run the server.
+* Hit the url: host:port/context-root like http://localhost:8080/spring-content-negotiation-demo/
 
-### Use following URLs for demonstration
+### You may also use following URLs for demonstration
 
 ```
 <host>:<port>/spring-content-negotiation-demo/user/1
